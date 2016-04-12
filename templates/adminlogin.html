@@ -2,7 +2,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
  <script src="/static/js/jquery-1.8.2.min.js"></script>
- <script src="/static/js/move.js"></script>
+ <script src="/static/js/adminlogin.js"></script>
  <link rel="stylesheet" type="text/css" href="/static/css/login2.css" />
      <link rel="stylesheet" type="text/css" href="/static/css/buttons.css" />
 </head>
@@ -12,9 +12,10 @@
 	<div class="content">
         <!--  登录面板    -->
         <div class="panel">
+            <h1>admin</h1>
             <!--  账号和密码组    -->
             <div class="group">
-                <input class="username" placeholder="username" id="username">
+                <input class="username" placeholder="adminname" id="adminname">
                 
             </div>
             <div class="group">
@@ -26,7 +27,7 @@
                 <button id="submit" class="button button-3d button-uppercase button-royal">login</button>
             </div>
             <div class="register">
-                <form action="/jump" method="post">
+                <form action="/adminjump" method="post">
             <button class="button button-3d button-caution button-uppercase">register</button>
                     </form>
         </div>

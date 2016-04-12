@@ -2,6 +2,13 @@ body{ margin:0px;
      transition:  all 0.2s;
     -webkit-filter:blur(0px);
 }
+h1 {
+	color: #1D2F3B;
+    font-size: 40px;
+    font-weight: 700;
+    text-shadow: 0 1px 4px rgba(0,0,0,.2);
+    margin: 10px;
+}
 .bac
  {
 /* background-image: url(/static/img/test-small.png);

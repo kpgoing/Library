@@ -21,7 +21,7 @@ h1 {
   
 }
 .input{
-    display: inline;
+    /*display: inline;*/
     /*display: block;!*设置为块，是为了让输入框独占一行*!*/
     width: 250px;/*宽度为250px*/
     height: 30px;/*高度为30px*/
@@ -94,4 +94,8 @@ h1 {
     font-size: 20px;
 	font-weight: 200;
     top: -8px;
+}
+
+.add{
+    float: right;
 }

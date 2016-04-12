@@ -72,7 +72,7 @@ $(function () {
 });
 function addBook(sentdata){
     $.ajax({
-        url : "/admin/addbook",
+        url : "/book/addbook",
         type : "POST",
         datatype:"json",
         data:JSON.stringify(sentdata),
@@ -85,7 +85,7 @@ function addBook(sentdata){
 })};
 function deleteBook(sentdata){
     $.ajax({
-        url : "/admin/deletebook",
+        url : "/book/deletebook",
         type : "POST",
         datatype:"json",
         data:JSON.stringify(sentdata),

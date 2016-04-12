@@ -1,58 +1,37 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <script src="/static/js/jquery-1.8.2.min.js"></script>
+ <script src="/static/js/move.js"></script>
+ <link rel="stylesheet" type="text/css" href="/static/css/login2.css" />
+     <link rel="stylesheet" type="text/css" href="/static/css/buttons.css" />
+</head>
+<body>
+	<div id='bg'><img src="/static/img/test-small.png" class = 'bac blur'></div>
 
-<!DOCTYPE html>
-<html lang="en" class="no-js">
+	<div class="content">
+        <!--  登录面板    -->
+        <div class="panel">
+            <!--  账号和密码组    -->
+            <div class="group">
+                <input class="username" placeholder="username" id="username">
+                
+            </div>
+            <div class="group">
+                <input password="password" placeholder="password" type="password" id="password">
+            </div>
 
-    <head>
-        <meta charset="utf-8">
-        <title>Login</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="author" content="">
-
-        <!-- CSS -->
-        <!-- <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'> -->
-        <link rel="stylesheet" href="/static/css/reset.css">
-        <link rel="stylesheet" href="/static/css/supersized.css">
-        <link rel="stylesheet" href="/static/css/style.css">
-
-        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-        <!--[if lt IE 9]>
-            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-
-    </head>
-
-    <body>
-
-        <div class="page-container">
-            <h1>Login</h1>
-            <br>
-            <h2 style="color: red">{{ message }}</h2>
-            <form action="/login" method="post">
-                <input type="text" name="username" class="username" placeholder="Username">
-                <input type="password" name="password" class="password" placeholder="Password">
-                <button type="submit">Sign me in</button>
-                <div class="error"><span>+</span></div>
-            </form>
-           <!--  <div class="connect">
-                <p>Or connect with:</p>
-                <p>
-                    <a class="facebook" href=""></a>
-                    <a class="twitter" href=""></a>
-                </p>
-            </div> -->
-            <form action="/jump" method="post">
-            <button type="submit" >register</button>
-            </form>
+            <!--  登录按钮    -->
+            <div class="login">
+                <button id="submit" class="button button-3d button-uppercase button-royal">login</button>
+            </div>
+            <div class="register">
+                <form action="/jump" method="post">
+            <button class="button button-3d button-caution button-uppercase">register</button>
+                    </form>
         </div>
-
-        <!-- Javascript -->
-        <script src="/static/js/jquery-1.8.2.min.js"></script>
-        <script src="/static/js/supersized.3.2.7.min.js"></script>
-        <script src="/static/js/supersized-init.js"></script>
-        <script src="/static/js/scripts.js"></script>
-
-    </body>
-
+        </div>
+      </div>
+    <!-- <div id="bg"><img src="test.png" alt="" /></div> -->
+</body>
 </html>
-

@@ -7,6 +7,8 @@ from UserORM import User
 from BooksORM import Book
 from BookService import BookService
 from ResponseBody import ResponseBody
+from AdminORM import Admin
+from AdminService import AdminService
 app = Flask(__name__)
 log = logging.getLogger('api')
 log.setLevel(logging.DEBUG)
@@ -41,13 +43,13 @@ def signin():
             return render_template('login.html', message='Bad username or password', username=username)
 #made by ajax
 @app.route('/login', methods=['POST','GET'])
-def signin2():
+def userLogin():
     if request.method == 'GET':
         if 'username' in session:
-            log.info('%s is get the /login2 and be redirected to /books',session['username'])
-            return redirect(url_for('books'))
+            log.info('%s is get the /login and be redirected to /books',session['username'])
+            return redirect(url_for('userBooks'))
         else:
-            return render_template('login2.html')
+            return render_template('login.html')
     if request.method == 'POST':
         text = request.get_json()
         user = User(text['username'],text['password'])
@@ -56,72 +58,102 @@ def signin2():
             session['username'] = user.username
             return ResponseBody(1,None).getContent()
         else:
-            return render_template('login.html', message='Bad username or password', username=text.username)
-# @app.route('/admin', methods=['POST','GET'])
-# def signin2():
-#     if request.method == 'GET':
-#         if 'admin' in session:
-#             # log.info('%s is get the /login2 and be redirected to /books',session['username'])
-#             return redirect(url_for('/admin/managerbooks'))
-#         else:
-#             return render_template('admin.html')
-#     if request.method == 'POST':
-#         text = request.get_json()
-#         user = User(text['admin'],text['password'])
-#         adminService = AdminService()
-#         if userService.loginCheckByORM(user):
-#             session['username'] = user.username
-#             return ResponseBody(1,None).getContent()
-#         else:
-#             return render_template('login.html', message='Bad username or password', username=text.username)
+            return  ResponseBody(0,None).getContent()
 @app.route('/jump', methods=['POST'])
-def jump():
+def userjump():
     return render_template('register.html')
 
-@app.route('/book')
-def books():
+@app.route('/library')
+def userBooks():
     if 'username' in session:
-        return render_template('books.html')
+        return render_template('library.html')
     else:
-        return flask.redirect(flask.url_for('signin2'))
+        return flask.redirect(flask.url_for('userLogin'))
 
 @app.route('/register', methods=['POST'])
-def register():
+def userRegister():
     username = request.form['username']
     password = request.form['password']
     user = User(username,password)
     userService = UserService()
     if userService.regiter(user):
-        return render_template('login2.html', username=username)
+        return render_template('login.html', username=username)
     else:
         return render_template('register.html',message='Bad username or password', username=username)
 
 
-@app.route('/book/allbooks',methods=['POST','GET'])
+@app.route('/logout',methods=['POST'])
+def userLogout():
+    # 如果会话中有用户名就删除它。
+    session.pop('username', None)
+    return redirect(url_for('userLogin'))
+@app.route('/admin', methods=['POST','GET'])
+def adminLogin():
+    if request.method == 'GET':
+        if 'adminname' in session:
+            # log.info('%s is get the /login and be redirected to /books',session['username'])
+            return redirect(url_for('adminBooks'))
+        else:
+            return render_template('adminlogin.html')
+    if request.method == 'POST':
+        text = request.get_json()
+        admin = Admin(text['adminname'],text['password'])
+        adminService = AdminService()
+        if adminService.loginCheckByORM(admin):
+            session['adminname'] = admin.adminname
+            return ResponseBody(1,None).getContent()
+        else:
+            return ResponseBody(0,None).getContent()
+
+
+@app.route('/admin/book')
+def adminBooks():
+    if 'adminname' in session:
+        return render_template('books.html')
+    else:
+        return flask.redirect(flask.url_for('adminLogin'))
+@app.route('/admin/register', methods=['POST'])
+def adminRegister():
+    adminname = request.form['adminname']
+    password = request.form['password']
+    admin = Admin(adminname,password)
+    adminService = AdminService()
+    if adminService.regiter(admin):
+        session['adminname'] = admin.username
+        return redirect(url_for('adminBooks'))
+    else:
+        return render_template('adminregister.html',message='Bad username or password', adminname=adminname)
+@app.route('/adminjump', methods=['POST'])
+def adminJump():
+    return render_template('adminregister.html')
+
+
+@app.route('/admin/logout',methods=['POST'])
+def adminLogout():
+    # 如果会话中有用户名就删除它。
+    session.pop('adminname', None)
+    return redirect(url_for('adminLogin'))
+
+@app.route('/allbooks',methods=['POST','GET'])
 def getAllBooks():
     bookService = BookService()
     data = bookService.getAllBooks()
     myres = ResponseBody(1,data)
     return  myres.getContent()
-@app.route('/book/addbook',methods=['POST'])
+@app.route('/admin/addbook',methods=['POST'])
 def addBook():
     data = request.get_json()
     bookService = BookService()
     book = Book(data['name'])
     bookService.addBook(book)
     return ResponseBody(1,data).getContent()
-@app.route('/book/deletebook',methods=['POST'])
+@app.route('/admin/deletebook',methods=['POST'])
 def deleteBook():
     data = request.get_json()
     bookService = BookService()
     book = Book(data['name'])
     bookService.deleteBook(book)
     return ResponseBody(1,data).getContent()
-@app.route('/logout',methods=['POST'])
-def logout():
-    # 如果会话中有用户名就删除它。
-    session.pop('username', None)
-    return redirect(url_for('signin2'))
 if __name__ == '__main__':
     initlog()
     app.run()

@@ -30,24 +30,22 @@ a.on('click', function  () {
 	$.ajax(
 		{
 			type: "POST",
-			url:"./login2",
+			url:"./admin",
 			datatype:"json",
 			contentType: 'application/json',
                 data: JSON.stringify({
-                    username: $('#username').val(),
+                    adminname: $('#adminname').val(),
                     password: $('#password').val()
                 }),
 			success: function (data) {
 					if (data.status == 1){
-						location.href='/book';
+						location.href='/admin/book';
 					}else {
-						location.reload()
-					}
+                        location.reload();
+                    }
 				}
 
 		}
 	)
 })
 });
-
-//})
