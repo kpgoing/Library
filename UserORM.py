@@ -19,8 +19,3 @@ class User(Base):
     id = Column(Integer, primary_key=True,autoincrement=True)
     username = Column(String(20))
     password = Column(String(20))
-
-# 初始化数据库连接:
-engine = create_engine('mysql+mysqlconnector://root:@localhost:3306/test')
-# 创建DBSession类型:
-DBSession = sessionmaker(bind=engine)

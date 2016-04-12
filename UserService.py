@@ -2,9 +2,7 @@
 from UserDao import UserDao
 import UserORM
 from UserORM import User
-import sqlalchemy
-from UserORM import User
-
+from DBsession import DBSession
 __author__ = 'xbw'
 class UserService(object):
 
@@ -19,7 +17,7 @@ class UserService(object):
             return False
 
     def loginCheckByORM(self, loginUser):
-        session = UserORM.DBSession()
+        session = DBSession()
         try:
             checkuser = session.query(User).filter(User.username == loginUser.username).one()
             print checkuser.username
@@ -36,7 +34,7 @@ class UserService(object):
 
 
     def regiter(self, user):
-        session = UserORM.DBSession()
+        session = DBSession()
 # 创建新User对象:
         try:
             checkuser = session.query(UserORM.User).filter(UserORM.User.username == user.username).one()

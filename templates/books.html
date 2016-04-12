@@ -1,0 +1,32 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script src="/static/js/jquery-1.8.2.min.js"></script>
+	<script src="/static/js/vue.js"></script>
+	<script src="/static/js/books.js"></script>
+    <script type="text/javascript">
+        Vue.config.delimiters = ['${', '}'];
+    </script>
+         <link rel="stylesheet" type="text/css" href="/static/css/buttons.css" />
+	<link rel="stylesheet" type="text/css" href="/static/css/books.css" />
+</head>
+<body>
+<div id="app" class = 'content'>
+  <h1>Manager books</h1>
+        <div class="logout">
+            <form action="/logout" method="POST">
+        <button class="button button-3d button-uppercase button-royal">loggout</button>
+                </form>
+    </div>
+  <label for="bookname" class="label">new book </label>
+    <input v-model="newBook" v-on:keyup.enter="addToBooks" class = 'input' id="bookname">
+  <div class = 'books'>
+    <div v-for="book in books" class = 'book' id="${ $index }">
+      <span class = 'name'>《${book.name}》 count:</span>
+        <span class= "count">${book.count}</span>
+      <button v-on:click="removeBook($index)" class='right'>X</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+body{
+	background-color: #FDECD0;
+     font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+}
+h1 {
+	color: #1D2F3B;
+    font-size: 100px;
+    font-weight: 700;
+    text-shadow: 0 1px 4px rgba(0,0,0,.2);
+    margin: 10px;
+}
+.content  {
+    /*position:fixed;*/
+    margin-left:auto;
+    margin-right:auto;
+    width: 50%;
+    /*margin: 0px auto;*/
+    /*margin-width: 302px;*/
+    position:relative;
+    top: 10px;
+  
+}
+.input{
+    display: inline;
+    /*display: block;!*设置为块，是为了让输入框独占一行*!*/
+    width: 250px;/*宽度为250px*/
+    height: 30px;/*高度为30px*/
+    border: 1px solid #ddd;/*输入框的边框*/
+    padding: 0px 0px 0px 10px;/*左边内边距为10px，显得美观*/
+    font-size: 16px;/*字体大小*/
+
+
+    background: #1a1f2d; /* browsers that don't support rgba */
+    background: rgba(26, 31, 45, 0.97);
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    border: 1px solid #3d3d3d; /* browsers that don't support rgba */
+    border: 1px solid rgba(255,255,255,.15);
+    -moz-box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) inset;
+    -webkit-box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) inset;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) inset;
+    font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    color: #fff;
+    margin-right: 186px;
+}
+.books{
+	 margin-top: 20px;
+}
+.book{
+	margin-top: 10px;
+	border-color: #91BFBF;
+	border-style: solid ;
+    padding: 5px 5px 5px 5px;
+}
+.name {
+	font-size: 20px;
+	font-weight: bolder;
+	width: 250px;/*宽度为250px*/
+    height: 30px;/*高度为30px*/
+    color: #1D2F3B;
+}
+
+
+.right
+{
+	color:white;
+	border: 1px solid #528870;
+	position:absolute;
+	right:10px;
+	width:30px;
+	height: 23px;
+	background-color:#528870;
+}
+
+.label{
+    font-size: 20px;
+	font-weight: 900;
+}
+
+.logout{
+    float: right;
+    right:10px;
+    top: 130px;
+}
+
+
+.logout button{
+    /*color: rgb(248, 241, 255);*/
+	/*border: 1px solid #1a1f2d;*/
+	/*position:absolute;*/
+	/*background-color: #1a1f2d;*/
+    font-size: 20px;
+	font-weight: 200;
+    top: -8px;
+}
