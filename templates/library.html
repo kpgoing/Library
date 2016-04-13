@@ -19,12 +19,14 @@
                 </form>
     </div>
   <label for="bookname" class="label">search: </label>
-    <input  class = 'input' id="bookname">
+    <input v-model="wantBook" v-on:keyup.enter="borrowBook" class = 'input' id="bookname">
   <div class = 'books'>
     <div v-for="book in books" class = 'book' id="${ $index }">
-      <span class = 'name'>《${book.name}》 count:</span>
-        <span class= "count">${book.count}</span>
-      <button class='right'>租借</button>
+   <span class = 'name'>《${book.name}》       </span>
+        <span class= "count">剩余: ${book.remainder}    </span>
+        <span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}">已借出: ${book.borrow}</span>
+        <span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">全部都已借出 剩余未预约: ${book.reservation}</span>
+        <button  v-on:click="borrowBook(book.name)" class='right'>租借</button>
     </div>
   </div>
 </div>

@@ -28,21 +28,21 @@ $(function () {
                    for (i = 0; i < this.books.length; i++) {
                         if (this.books[i].name == book) {
                             that = this;
-                            $('.books').find('#'+i).find('.count').slideToggle(200);
-                            setTimeout(function(){that.books[i].count++;
-                                        $('.books').find('#'+i).find('.count').slideToggle(200);
+                            $('.books').find('#'+i).find('.remainder').slideToggle(200);
+                            setTimeout(function(){that.books[i].count++;that.books[i].remainder++
+                                        $('.books').find('#'+i).find('.remainder').slideToggle(200);
                             },200);
                             flag = false;
                             break;
                         }
                     }
                       if (flag){
-                      this.books.push({ name: book ,count:1});
+                      this.books.push({ name: book ,count:1,remainder:1,reservation:0,borrow:0,borrow_datetime: null,reservation_datetime: null});
                          index =  this.books.length-1;
                   }
                   }else {
-                      this.books = [{ name: book ,count:1}];
-                      index =  this.books.length-1;;
+                      this.books = [{ name: book ,count:1,remainder:1,reservation:0,borrow:0,borrow_datetime: null,reservation_datetime: null}];
+                      index =  this.books.length-1;
                   }
                   addBook({name:book});
                 this.newBook = ''
@@ -55,12 +55,14 @@ $(function () {
                 var book = this.books[index];
                 if (book) {
                      that = this;
-                            $('.books').find('#'+index).find('.count').slideUp(200);
-                            setTimeout(function(){book.count--;
-                                        $('.books').find('#'+index).find('.count').slideDown(200);
-                                      if (book.count == 0){
-                                        $('.books').find('#'+index).slideUp(300);
-                                        setTimeout(function(){that.books.splice(index, 1);
+                            setTimeout(function(){
+                                        if(book.count > 1) {
+                                            $('.books').find('#' + index).find('.remainder').slideUp(200);
+                                            book.count--;book.remainder--;
+                                            $('.books').find('#' + index).find('.remainder').slideDown(200);
+                                        }else{
+                                            $('.books').find('#'+index).slideUp(300);
+                                            setTimeout(function(){that.books.splice(index, 1);
                                         }, 300);
                                     }
                             },200);

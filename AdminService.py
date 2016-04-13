@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from AdminORM import Admin
+from tableORM import Admin
 from DBsession import DBSession
 __author__ = 'xbw'
 class AdminService(object):

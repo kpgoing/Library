@@ -1,7 +1,6 @@
 # coding=utf-8
 from UserDao import UserDao
-import UserORM
-from UserORM import User
+from tableORM import User
 from DBsession import DBSession
 __author__ = 'xbw'
 class UserService(object):

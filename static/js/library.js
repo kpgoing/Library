@@ -16,84 +16,53 @@ $(function () {
            new Vue({
           el: '#app',
           data: {
-            newBook: '',
+            wantBook: '',
             books: bookdata
           },
           methods: {
-            addToBooks: function () {
-              var book = this.newBook.trim();
+            borrowBook: function () {
+              var book = this.wantBook.trim();
               if (book) {
                   var flag = true;
-                  if(this.books){
                    for (i = 0; i < this.books.length; i++) {
                         if (this.books[i].name == book) {
-                            that = this;
-                            $('.books').find('#'+i).find('.count').slideToggle(200);
-                            setTimeout(function(){that.books[i].count++;
-                                        $('.books').find('#'+i).find('.count').slideToggle(200);
-                            },200);
-                            flag = false;
-                            break;
+                            if (this.books[i].remainder > 0) {
+                                that = this;
+                                $('.books').find('#' + i).find('.borrow').slideToggle(200);
+                                setTimeout(function () {
+                                    that.books[i].borrow++;
+                                    that.books[i].remainder--;
+                                    $('.books').find('#' + i).find('.borrow').slideToggle(200);
+                                }, 200);
+                                flag = false;
+                                borrowBook({name:book});
+                                break;
+                            }
                         }
                     }
                       if (flag){
-                      this.books.push({ name: book ,count:1});
-                         index =  this.books.length-1;
+                        alert('无此书籍!')
                   }
-                  }else {
-                      this.books = [{ name: book ,count:1}];
-                      index =  this.books.length-1;;
-                  }
-                  addBook({name:book});
                 this.newBook = ''
               }
-            },
-
-
-
-            removeBook: function (index) {
-                var book = this.books[index];
-                if (book) {
-                     that = this;
-                            $('.books').find('#'+index).find('.count').slideUp(200);
-                            setTimeout(function(){book.count--;
-                                        $('.books').find('#'+index).find('.count').slideDown(200);
-                                      if (book.count == 0){
-                                        $('.books').find('#'+index).slideUp(300);
-                                        setTimeout(function(){that.books.splice(index, 1);
-                                        }, 300);
-                                    }
-                            },200);
-                    deleteBook({name: book.name});
-                }}
+            }
           }
         });
     }
 });
-function addBook(sentdata){
+function borrowBook(sentdata){
     $.ajax({
-        url : "/book/addbook",
+        url : "/book/borrowbook",
         type : "POST",
         datatype:"json",
         data:JSON.stringify(sentdata),
         contentType: 'application/json',
         success : function(mydata){
             if (mydata.status ==  1) {
-                //alert('add success!');
+                alert('借阅成功');
             }
         }
-})};
-function deleteBook(sentdata){
-    $.ajax({
-        url : "/book/deletebook",
-        type : "POST",
-        datatype:"json",
-        data:JSON.stringify(sentdata),
-        contentType: 'application/json',
-        success : function(mydata){
-            if (mydata.status ==  1) {
+    })
+}
 
-            }
-        }
-})};
 

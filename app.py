@@ -3,11 +3,12 @@ import logging
 import flask
 from flask import Flask, request, render_template, session,redirect,url_for
 from UserService import UserService
-from UserORM import User
-from BooksORM import Book
+# from UserORM import User
+# from BookORM import Book
+from tableORM import User,Admin,BorrowList,Book
 from BookService import BookService
 from ResponseBody import ResponseBody
-from AdminORM import Admin
+# from AdminORM import Admin
 from AdminService import AdminService
 app = Flask(__name__)
 log = logging.getLogger('api')
@@ -105,6 +106,30 @@ def adminLogin():
         else:
             return ResponseBody(0,None).getContent()
 
+@app.route('/library/borrow',methods=['POST'])
+def borrowBook():
+    data = request.get_json()
+    bookService = BookService()
+    flag = bookService.borrowBook(data['userid'],data['bookname'])
+    myres = ResponseBody(flag,None)
+    return  myres.getContent()
+
+@app.route('/library/showborrowedbook',methods=['POST'])
+def showBorrowBook():
+    data = request.get_json()
+    bookService = BookService()
+    borrowBooks = bookService.getonesbooks(session['userid'])
+    myres = ResponseBody(1,borrowBooks)
+    return  myres.getContent()
+
+@app.route('/library/return',methods=['POST'])
+def returnBook():
+    data = request.get_json()
+    bookService = BookService()
+    flag = bookService.returnBook(session['userid'],data['bookname'])
+    myres = ResponseBody(flag,None)
+    return  myres.getContent()
+
 
 @app.route('/admin/book')
 def adminBooks():
@@ -156,4 +181,5 @@ def deleteBook():
     return ResponseBody(1,data).getContent()
 if __name__ == '__main__':
     initlog()
+    app.debug = True
     app.run()

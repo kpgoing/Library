@@ -30,7 +30,7 @@ a.on('click', function  () {
 	$.ajax(
 		{
 			type: "POST",
-			url:"./login2",
+			url:"./login",
 			datatype:"json",
 			contentType: 'application/json',
                 data: JSON.stringify({
@@ -39,7 +39,7 @@ a.on('click', function  () {
                 }),
 			success: function (data) {
 					if (data.status == 1){
-						location.href='/book';
+						location.href='/library';
 					}else {
 						location.reload()
 					}
