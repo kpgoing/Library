@@ -74,6 +74,11 @@ h1 {
 	background-color:#528870;
 }
 
+.right2
+{
+    float: right;
+    margin-top: -2px;
+}
 .label{
     font-size: 20px;
 	font-weight: 900;
@@ -107,4 +112,10 @@ h1 {
 }
 .hide{
     display: none;
+}
+
+.top{
+     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }

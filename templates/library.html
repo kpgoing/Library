@@ -11,8 +11,17 @@
 	<link rel="stylesheet" type="text/css" href="/static/css/books.css" />
 </head>
 <body>
-<div id="app" class = 'content'>
-  <h1>Lbrary Systerm</h1>
+<div class="top">
+   <div class="button-group topbuttons">
+    <button id="topbutton1" type="button" class="button button-pill button-primary">我的借阅</button>
+    <button id="topbutton2" type="button" class="button button-pill button-action button-action">图书总览</button>
+    <button id="topbutton3" type="button" class="button button-pill button-action button-highlight ">其他消息</button>
+  </div>
+    </div>
+
+<div id="app2" class = 'content'>
+  <h1>Lbrary System</h1>
+
         <div class="logout">
             <form action="/logout" method="POST">
         <button class="button button-3d button-uppercase button-royal">loggout</button>
@@ -21,12 +30,12 @@
   <label for="bookname" class="label">search: </label>
     <input v-model="wantBook" v-on:keyup.enter="borrowBook" class = 'input' id="bookname">
   <div class = 'books'>
-    <div v-for="book in books" class = 'book' id="${ $index }">
+    <div v-for="book in books | filterBy wantBook in 'name'" class = 'book' id="${ $index }">
    <span class = 'name'>《${book.name}》       </span>
-        <span class= "count">剩余: ${book.remainder}    </span>
-        <span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}">已借出: ${book.borrow}</span>
-        <span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">全部都已借出 剩余未预约: ${book.reservation}</span>
-        <button  v-on:click="borrowBook(book.name)" class='right'>租借</button>
+        <span class= "count">剩余: ${book.remainder}  </span>
+        已借出:<span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}">   ${book.borrow}</span>
+        <span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">     全部都已借出 剩余未预约: ${book.borrow - book.reservation}</span>
+        <button  v-on:click="borrowBook(book.name) " class='right2 button button-primary button-small'>借阅</button>
     </div>
   </div>
 </div>

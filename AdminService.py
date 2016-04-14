@@ -16,7 +16,7 @@ class AdminService(object):
                 flag = True
             session.close()
             return flag
-        except:
+        except BaseException as e:
             session.close()
             return False
 

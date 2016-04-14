@@ -47,7 +47,7 @@ def signin():
 def userLogin():
     if request.method == 'GET':
         if 'username' in session:
-            log.info('%s is get the /login and be redirected to /books',session['username'])
+            log.info('%s is get the /login and be redirected to /books',session['userid'])
             return redirect(url_for('userBooks'))
         else:
             return render_template('login.html')
@@ -55,8 +55,9 @@ def userLogin():
         text = request.get_json()
         user = User(text['username'],text['password'])
         userService = UserService()
-        if userService.loginCheckByORM(user):
-            session['username'] = user.username
+        userid = userService.loginCheckByORM(user)
+        if userid != -1:
+            session['userid'] = userid
             return ResponseBody(1,None).getContent()
         else:
             return  ResponseBody(0,None).getContent()
@@ -66,7 +67,7 @@ def userjump():
 
 @app.route('/library')
 def userBooks():
-    if 'username' in session:
+    if 'userid' in session:
         return render_template('library.html')
     else:
         return flask.redirect(flask.url_for('userLogin'))
@@ -86,7 +87,7 @@ def userRegister():
 @app.route('/logout',methods=['POST'])
 def userLogout():
     # 如果会话中有用户名就删除它。
-    session.pop('username', None)
+    session.pop('userid', None)
     return redirect(url_for('userLogin'))
 @app.route('/admin', methods=['POST','GET'])
 def adminLogin():
@@ -110,7 +111,7 @@ def adminLogin():
 def borrowBook():
     data = request.get_json()
     bookService = BookService()
-    flag = bookService.borrowBook(data['userid'],data['bookname'])
+    flag = bookService.borrowBook(session['userid'],data['bookname'])
     myres = ResponseBody(flag,None)
     return  myres.getContent()
 

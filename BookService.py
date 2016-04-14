@@ -13,23 +13,27 @@ class BookService(object):
             books = session.query(Book).all()
             realbooks = []
             for book in books:
+                a = book.getContent()
                 realbooks.append(book.getContent())
             session.close()
             return realbooks
-        except:
+        except BaseException as e:
             session.close()
             return None
 
     def borrowBook(self,userid,bookname):
         session = DBsession.DBSession()
         try:
-            checkbook = session.query(Book.name == bookname).one()
-            checkuser = session.query(User.id == userid).one()
+            checkbook = session.query(Book).filter(Book.name == bookname).one()
             checkbook.remainder = checkbook.remainder - 1
             checkbook.borrow = checkbook.borrow + 1
-            borrowList = BorrowList(userid,checkbook.id)
+            borrowList = BorrowList(userid,checkbook.bid)
+            session.add(borrowList)
+            session.commit()
+            session.close()
             return 1
-        except:
+        except BaseException as e :
+            print e
             session.close()
             return 0
 
@@ -46,7 +50,7 @@ class BookService(object):
             session.commit()
             session.close()
             return True
-        except:
+        except BaseException as e:
             session.close()
             return False
 
@@ -60,7 +64,7 @@ class BookService(object):
                 reallist.append(item.getContent())
             session.close()
             return reallist
-        except:
+        except BaseException as e:
             session.close()
             return None
 
@@ -73,7 +77,7 @@ class BookService(object):
             checkbook.count = checkbook.count + book.count
             checkbook.remainder = checkbook.count
             session.add(checkbook)
-        except:
+        except BaseException as e:
             session.add(book)
         finally:
             session.commit()
@@ -84,12 +88,13 @@ class BookService(object):
         session = DBsession.DBSession()
         try:
             checkbook = session.query(Book).filter(Book.name == book.name).one()
-            checkbook.count = checkbook.count - book.count
+            checkbook.count = checkbook.count - 1
+            checkbook.remainder = checkbook.borrow - 1
             if checkbook.count == 0:
                 session.delete(checkbook)
             else:
                 session.add(checkbook)
-        except:
+        except BaseException as e:
             pass
         finally:
             session.commit()

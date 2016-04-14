@@ -22,6 +22,7 @@ $(function () {
           methods: {
             addToBooks: function () {
               var book = this.newBook.trim();
+                that = this;
               if (book) {
                   var flag = true;
                   if(this.books){
@@ -29,7 +30,7 @@ $(function () {
                         if (this.books[i].name == book) {
                             that = this;
                             $('.books').find('#'+i).find('.remainder').slideToggle(200);
-                            setTimeout(function(){that.books[i].count++;that.books[i].remainder++
+                            setTimeout(function(){that.books[i].count++;that.books[i].remainder++;
                                         $('.books').find('#'+i).find('.remainder').slideToggle(200);
                             },200);
                             flag = false;
@@ -55,18 +56,21 @@ $(function () {
                 var book = this.books[index];
                 if (book) {
                      that = this;
-                            setTimeout(function(){
+
                                         if(book.count > 1) {
-                                            $('.books').find('#' + index).find('.remainder').slideUp(200);
-                                            book.count--;book.remainder--;
+                                            $('.books').find('#' + index).find('.remainder').slideUp(200, function () {
+                                               book.count--;book.remainder--;
                                             $('.books').find('#' + index).find('.remainder').slideDown(200);
+                                             deleteBook({name: book.name});
+                                            });
                                         }else{
-                                            $('.books').find('#'+index).slideUp(300);
-                                            setTimeout(function(){that.books.splice(index, 1);
-                                        }, 300);
+
+                                            $('.books').find('#'+index).slideUp(300, function () {
+                                                that.books.splice(index, 1);
+                                                deleteBook({name: book.name});
+                                            });
                                     }
-                            },200);
-                    deleteBook({name: book.name});
+
                 }}
           }
         });

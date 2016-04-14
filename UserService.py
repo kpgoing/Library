@@ -21,14 +21,14 @@ class UserService(object):
             checkuser = session.query(User).filter(User.username == loginUser.username).one()
             print checkuser.username
             if checkuser.password != loginUser.password:
-                flag = False
+                flag = -1
             else:
-                flag = True
+                flag = checkuser.id
             session.close()
             return flag
-        except:
+        except BaseException as e:
             session.close()
-            return False
+            return -1
 
 
 
@@ -36,10 +36,10 @@ class UserService(object):
         session = DBSession()
 # 创建新User对象:
         try:
-            checkuser = session.query(UserORM.User).filter(UserORM.User.username == user.username).one()
+            checkuser = session.query(User).filter(User.username == user.username).one()
             return False
-        except:
-            new_user = UserORM.User(username=user.username,password=user.password)
+        except BaseException as e:
+            new_user = User(username=user.username,password=user.password)
 # 添加到session:
             session.add(new_user)
 # 提交即保存到数据库:

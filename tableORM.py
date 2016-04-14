@@ -8,22 +8,6 @@ from sqlalchemy.ext.declarative import declarative_base
 # 创建对象的基类:
 Base = declarative_base()
 
-# 定义User对象:
-class User(Base):
-    # 表的名字:
-    __tablename__ = 'user'
-
-    def __init__(self,username,password):
-        self.username = username
-        self.password = password
-
-    # 表的结构:
-    id = Column(Integer, primary_key=True,autoincrement=True)
-    username = Column(String(20))
-    password = Column(String(20))
-
-    books = relationship("book")
-    borrowList = relationship("Borrowlist")
 
 
 # 定义User对象:
@@ -44,14 +28,14 @@ class Admin(Base):
 # 定义User对象:
 class Book(Base):
     # 表的名字:
-    __tablename__ = 'books'
+    __tablename__ = 'book'
 
     def __init__(self,name,count=1):
         self.name = name
         self.count = count
         self.remainder = count
     def getContent(self):
-        return {"name":self.name,"count":self.count,'remainder':self.remainder,'borrow':self.borrow,'reservation':self.reservation,'borrow_datetime':self.borrow_datetime,'reservation_datetime':self.reservation_datetime}
+        return {"name":self.name,"count":self.count,'remainder':self.remainder,'borrow':self.borrow,'reservation':self.reservation}
 
     # 表的结构:
     bid = Column(Integer, primary_key=True,autoincrement=True)
@@ -61,7 +45,7 @@ class Book(Base):
     borrow = Column(Integer,default=0)
     reservation = Column(Integer,default=0)
 
-    ownerid = Column(Integer, ForeignKey('test.user.id'))
+    ownerid = Column(Integer, ForeignKey('user.id'))
 
 # 定义User对象:
 class BorrowList(Base):
@@ -81,3 +65,19 @@ class BorrowList(Base):
     bookid = Column(Integer, ForeignKey('book.bid'))
     borrow_datetime = Column(DateTime)
     # reservation_datetime = Column(DateTime)
+# 定义User对象:
+class User(Base):
+    # 表的名字:
+    __tablename__ = 'user'
+
+    def __init__(self,username,password):
+        self.username = username
+        self.password = password
+
+    # 表的结构:
+    id = Column(Integer, primary_key=True,autoincrement=True)
+    username = Column(String(20))
+    password = Column(String(20))
+
+    books = relationship("Book")
+    borrowList = relationship("BorrowList")

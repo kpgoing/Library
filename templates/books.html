@@ -23,7 +23,7 @@
     <button v-on:click="addToBooks" class="add button button-3d button-action button-pill">add</button>
   <div class = 'books'>
     <div v-for="book in books | filterBy newBook in 'name'" class = 'book' id="${ $index }">
-      <span class = 'name'>《${book.name}》 剩余:</span>
+      <span class = 'name'>《${book.name}》 </span>剩余:
         <span class= "remainder"> ${book.remainder}       </span>
         <span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}">已借出: ${book.borrow}</span>
         <span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">全部都已借出 剩余未预约: ${book.reservation}</span>
