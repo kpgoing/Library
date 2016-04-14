@@ -35,7 +35,7 @@ class Book(Base):
         self.count = count
         self.remainder = count
     def getContent(self):
-        return {"name":self.name,"count":self.count,'remainder':self.remainder,'borrow':self.borrow,'reservation':self.reservation}
+        return {"bid":self.bid,"name":self.name,"count":self.count,'remainder':self.remainder,'borrow':self.borrow,'reservation':self.reservation}
 
     # 表的结构:
     bid = Column(Integer, primary_key=True,autoincrement=True)

@@ -24,14 +24,16 @@ $(function () {
               var book = this.newBook.trim();
                 that = this;
               if (book) {
+                  this.newBook = '';
                   var flag = true;
                   if(this.books){
                    for (i = 0; i < this.books.length; i++) {
                         if (this.books[i].name == book) {
                             that = this;
-                            $('.books').find('#'+i).find('.remainder').slideToggle(200);
+                            $('.books').find('#'+i).find('.remainder').slideDown(200);
                             setTimeout(function(){that.books[i].count++;that.books[i].remainder++;
-                                        $('.books').find('#'+i).find('.remainder').slideToggle(200);
+                                        $('.books').find('#'+i).find('.remainder').slideUp(200);
+                                        addBook({name:book});
                             },200);
                             flag = false;
                             break;
@@ -40,20 +42,27 @@ $(function () {
                       if (flag){
                       this.books.push({ name: book ,count:1,remainder:1,reservation:0,borrow:0,borrow_datetime: null,reservation_datetime: null});
                          index =  this.books.length-1;
+                          addBook({name:book});
                   }
                   }else {
                       this.books = [{ name: book ,count:1,remainder:1,reservation:0,borrow:0,borrow_datetime: null,reservation_datetime: null}];
                       index =  this.books.length-1;
+                      addBook({name:book});
                   }
-                  addBook({name:book});
-                this.newBook = ''
               }
             },
 
 
 
             removeBook: function (index) {
-                var book = this.books[index];
+                for (var i = 0;i < this.books.length ; i++){
+                    if(this.books[i].bid == index){
+                        var n = i;
+                        break;
+                    }
+                }
+
+                var book = this.books[n];
                 if (book) {
                      that = this;
 
@@ -102,4 +111,5 @@ function deleteBook(sentdata){
             }
         }
 })};
+
 

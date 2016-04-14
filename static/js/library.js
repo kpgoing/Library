@@ -1,76 +1,72 @@
 
 $(function () {
-    var apporder = 2;
-    $("#app1").hide();
-    $("#app3").hide();
-    $.ajax({
-        url : "/allbooks",
-        type : "POST",
-        datatype:"json",
-        contentType: 'application/json',
-        success : function(mydata){
-            if (mydata.status ==  1) {
-                bookdata =  mydata.body;
-                App2();
-            }
-        }
-    });
-    function App2() {
-        var app2 = new Vue({
+     getAllBooks();
+    window.app2 = new Vue({
           el: '#app2',
           data: {
             wantBook: '',
-            books: bookdata
+            books: {}
           },
           methods: {
-            borrowBook: function () {
-                book = arguments[0] ? arguments[0] : this.wantBook.trim();
+              borrowBook: function (name) {
+                  book = arguments[0] ? arguments[0] : this.wantBook.trim();
                   if (book) {
-                  var flag = true;
-                   for (i = 0; i < this.books.length; i++) {
-                        if (this.books[i].name == book) {
-                            if (this.books[i].remainder > 0) {
-                                that = this;
-                                $('#app2').find('#app2' + i).find('.borrow').slideToggle(200, function () {
-                                    that.books[i].borrow++;
-                                    that.books[i].remainder--;
-                                    $('#app2').find('#app2' + i).find('.borrow').slideToggle(200);
-                                    flag = false;
-                                borrowBook({bookname:book});
-                                });
-                                break;
-                            }
-                        }
-                    }
-                    setTimeout(function () {
-                        if (flag){
-                        alert('无此书籍!')
+                      var flag = true;
+                      for (i = 0; i < this.books.length; i++) {
+                          if (this.books[i].name == book) {
+                              if (this.books[i].remainder > 0) {
+                                  that = this;
+                                  $('.books').find('#app2' + i).find('.borrow').slideToggle(200, function () {
+                                      that.books[i].borrow++;
+                                      that.books[i].remainder--;
+                                      $('.books').find('#app2' + i).find('.borrow').slideToggle(200);
+                                      flag = false;
+                                      borrowBook({bookname: book});
+                                  });
+                                  break;
+                              }
+                          }
+                      }
+                      setTimeout(function () {
+                          if (flag) {
+                              alert('无此书籍!')
+                          }
+                      }, 500);
+                      this.newBook = ''
                   }
-                    },500) ;
-                this.newBook = ''
               }
-            }
           }
         });
-    }
+     window.app1 = new Vue({
+          el: '#app1',
+          data: {
+            wantBook: '',
+            books: {}
+          },
+          methods: {
+            returnBook: function (index) {
+                var book = this.books[index];
+                  if (book) {
+                                that = this;
+                                 $('.books').find('#app1'+index).slideUp(300, function () {
+                                                that.books.splice(index, 1);
+                                                returnBook({blid: book.blid});
+                                            });
+
+                    }
+              }
+            }
+          });
+    var apporder = 2;
+    $("#app1").hide();
+    $("#app3").hide();
   $("#topbutton1").click(function(){
       if (apporder != 1) {
           $("#app" + apporder).fadeOut(200, function () {
               $("#app1").fadeIn();
               apporder = 1;
           });
-           $.ajax({
-        url : "/library/showborrowedbook",
-        type : "POST",
-        datatype:"json",
-        contentType: 'application/json',
-        success : function(mydata){
-            if (mydata.status ==  1) {
-                bookdata1 =  mydata.body;
-                App1();
-            }
-        }
-    });
+           getBorrowBooks();
       }
 });
     $("#topbutton2").click(function(){
@@ -106,28 +102,6 @@ function borrowBook(sentdata){
         }
     })
 }
-function App1() {
-          var app1 = new Vue({
-          el: '#app1',
-          data: {
-            wantBook: '',
-            books: bookdata1
-          },
-          methods: {
-            returnBook: function (index) {
-                var book = this.books[index];
-                  if (book) {
-                                that = this;
-                                 $('.books').find('#app1'+index).slideUp(300, function () {
-                                                that.books.splice(index, 1);
-                                                returnBook({blid: book.blid});
-                                            });
-
-                    }
-              }
-            }
-          })
-}
 function returnBook(sentdata){
     $.ajax({
         url : "/library/return",
@@ -151,11 +125,41 @@ function getAllBooks(){
         contentType: 'application/json',
         success : function(mydata){
             if (mydata.status ==  1) {
-                .$set('books',mydata.body);
-
+                window.app2.$set('books',mydata.body);
+            }
+        }
+    });
+}
+function getBorrowBooks(){
+    $.ajax({
+        url : "/library/showborrowedbook",
+        type : "POST",
+        datatype:"json",
+        contentType: 'application/json',
+        success : function(mydata){
+            if (mydata.status ==  1) {
+                window.app1.$set('books',mydata.body);
             }
         }
     });
 }
 
-
+function Cool(book){
+      $('.books').find('app2#' + book.bid).find('.remainder').slideUp(200, function () {
+                            $('.books').find('app2#' + book.bid).find('.borrow').slideUp(200, function () {
+                                     book.remainder--;book.borrow++;
+                                            $('.books').find('app2#' + book.bid).find('.remainder').slideDown(200, function () {
+                                                $('.books').find('app2#' + book.bid).find('.borrow').slideDown(200);
+                                            });
+                                             borrowBook({bookname: book.bookname});
+                                            });
+                            });
+}
+function IsNum(s)
+{
+    if (s!=null && s!="")
+    {
+        return !isNaN(s);
+    }
+    return false;
+}
