@@ -117,7 +117,6 @@ def borrowBook():
 
 @app.route('/library/showborrowedbook',methods=['POST'])
 def showBorrowBook():
-    data = request.get_json()
     bookService = BookService()
     borrowBooks = bookService.getonesbooks(session['userid'])
     myres = ResponseBody(1,borrowBooks)
@@ -127,7 +126,7 @@ def showBorrowBook():
 def returnBook():
     data = request.get_json()
     bookService = BookService()
-    flag = bookService.returnBook(session['userid'],data['bookname'])
+    flag = bookService.returnBook(data['blid'])
     myres = ResponseBody(flag,None)
     return  myres.getContent()
 

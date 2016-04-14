@@ -52,17 +52,19 @@ class BorrowList(Base):
     # 表的名字:
     __tablename__ = 'borrowlist'
 
-    def __init__(self,userid,bookid):
+    def __init__(self,userid,bookid,bookname):
         self.userid = userid
         self.bookid = bookid
+        self.bookname = bookname
         self.borrow_datetime = datetime.datetime.now()
     def getContent(self):
-        return {"blid":self.blid,"userid":self.userid,'bookid':self.bookid,'borrow_datetime':self.borrow_datetime}
+        return {"blid":self.blid,"userid":self.userid,'bookid':self.bookid,'bookname':self.bookname,'borrow_datetime':self.borrow_datetime}
 
     # 表的结构:
     blid = Column(Integer, primary_key=True,autoincrement=True)
     userid = Column(Integer, ForeignKey('user.id'))
     bookid = Column(Integer, ForeignKey('book.bid'))
+    bookname = Column(String(45))
     borrow_datetime = Column(DateTime)
     # reservation_datetime = Column(DateTime)
 # 定义User对象:

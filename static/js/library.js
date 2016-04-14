@@ -1,5 +1,8 @@
 
 $(function () {
+    var apporder = 2;
+    $("#app1").hide();
+    $("#app3").hide();
     $.ajax({
         url : "/allbooks",
         type : "POST",
@@ -8,12 +11,12 @@ $(function () {
         success : function(mydata){
             if (mydata.status ==  1) {
                 bookdata =  mydata.body;
-                Go();
+                App2();
             }
         }
     });
-    function Go() {
-           new Vue({
+    function App2() {
+        var app2 = new Vue({
           el: '#app2',
           data: {
             wantBook: '',
@@ -28,10 +31,10 @@ $(function () {
                         if (this.books[i].name == book) {
                             if (this.books[i].remainder > 0) {
                                 that = this;
-                                $('.books').find('#' + i).find('.borrow').slideToggle(200, function () {
+                                $('#app2').find('#app2' + i).find('.borrow').slideToggle(200, function () {
                                     that.books[i].borrow++;
                                     that.books[i].remainder--;
-                                    $('.books').find('#' + i).find('.borrow').slideToggle(200);
+                                    $('#app2').find('#app2' + i).find('.borrow').slideToggle(200);
                                     flag = false;
                                 borrowBook({bookname:book});
                                 });
@@ -51,13 +54,43 @@ $(function () {
         });
     }
   $("#topbutton1").click(function(){
-   //$(".content").animate({
-   //    left:'=+300'
-   //},200,function(){
-   // alert('11');
-   //});
-      $("#app2").fadeOut();
+      if (apporder != 1) {
+          $("#app" + apporder).fadeOut(200, function () {
+              $("#app1").fadeIn();
+              apporder = 1;
+          });
+           $.ajax({
+        url : "/library/showborrowedbook",
+        type : "POST",
+        datatype:"json",
+        contentType: 'application/json',
+        success : function(mydata){
+            if (mydata.status ==  1) {
+                bookdata1 =  mydata.body;
+                App1();
+            }
+        }
+    });
+      }
 });
+    $("#topbutton2").click(function(){
+      if (apporder != 2) {
+          $("#app" + apporder).fadeOut(200, function () {
+              $("#app2").fadeIn();
+              apporder = 2;
+              getAllBooks();
+          });
+      }
+});
+    $("#topbutton3").click(function(){
+     if (apporder != 3) {
+          $("#app" + apporder).fadeOut(200, function () {
+              $("#app3").fadeIn();
+              apporder = 3;
+          });
+      }
+});
+
 });
 function borrowBook(sentdata){
     $.ajax({
@@ -73,6 +106,56 @@ function borrowBook(sentdata){
         }
     })
 }
+function App1() {
+          var app1 = new Vue({
+          el: '#app1',
+          data: {
+            wantBook: '',
+            books: bookdata1
+          },
+          methods: {
+            returnBook: function (index) {
+                var book = this.books[index];
+                  if (book) {
+                                that = this;
+                                 $('.books').find('#app1'+index).slideUp(300, function () {
+                                                that.books.splice(index, 1);
+                                                returnBook({blid: book.blid});
+                                            });
 
+                    }
+              }
+            }
+          })
+}
+function returnBook(sentdata){
+    $.ajax({
+        url : "/library/return",
+        type : "POST",
+        datatype:"json",
+        data:JSON.stringify(sentdata),
+        contentType: 'application/json',
+        success : function(mydata){
+            if (mydata.status ==  1) {
+                //alert('借阅成功');
+            }
+        }
+    })
+}
+
+function getAllBooks(){
+    $.ajax({
+        url : "/allbooks",
+        type : "POST",
+        datatype:"json",
+        contentType: 'application/json',
+        success : function(mydata){
+            if (mydata.status ==  1) {
+                .$set('books',mydata.body);
+
+            }
+        }
+    });
+}
 
 

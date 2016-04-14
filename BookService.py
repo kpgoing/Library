@@ -27,7 +27,7 @@ class BookService(object):
             checkbook = session.query(Book).filter(Book.name == bookname).one()
             checkbook.remainder = checkbook.remainder - 1
             checkbook.borrow = checkbook.borrow + 1
-            borrowList = BorrowList(userid,checkbook.bid)
+            borrowList = BorrowList(userid,checkbook.bid,checkbook.name)
             session.add(borrowList)
             session.commit()
             session.close()
@@ -37,12 +37,11 @@ class BookService(object):
             session.close()
             return 0
 
-    def returnBook(self,userid,bookname):
+    def returnBook(self,blid):
         session = DBsession.DBSession()
         try:
-            checkBook = session.query(Book.name == bookname).one()
-            checkUser = session.query(User.id == userid).one()
-            checkList = session.query(BorrowList).filter_by(and_(BorrowList.userid==userid,BorrowList.bookid==checkBook.bid)).all()
+            checkList = session.query(BorrowList).filter(BorrowList.blid == blid).one()
+            checkBook = session.query(Book).filter(Book.bid == checkList.bookid).one()
 
             checkBook.remainder = checkBook.remainder + 1
             checkBook.borrow = checkBook.borrow - 1
@@ -57,8 +56,9 @@ class BookService(object):
     def getonesbooks(self,userid):
         session = DBsession.DBSession()
         try:
-            checkUser = session.query(User.id == userid).one()
+            checkUser = session.query(User).filter(User.id == userid).one()
             borrowList = checkUser.borrowList
+            # borrowList = session.query(BorrowList).filter(BorrowList.userid==userid).all()
             reallist = []
             for item in borrowList:
                 reallist.append(item.getContent())
