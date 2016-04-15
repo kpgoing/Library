@@ -51,17 +51,6 @@
 </div>
 <div id="app3" class = 'content'>
   <h1>我的信息</h1>
-  <label for="bookname" class="label">search: </label>
-    <input v-model="wantBook" v-on:keyup.enter="borrowBook" class = 'input' id="bookname">
-  <div class = 'books'>
-    <div v-for="book in books | filterBy wantBook in 'name'" class = 'book' id="${ $index }">
-   <span class = 'name'>《${book.name}》       </span>
-        <span class= "count">剩余: ${book.remainder}  </span>
-        已借出:<span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}">   ${book.borrow}</span>
-        <span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">     全部都已借出 剩余未预约: ${book.borrow - book.reservation}</span>
-        <button  v-on:click="borrowBook(book.name) " class='right2 button button-primary button-small'>借阅</button>
-    </div>
-  </div>
 </div>
 
 </body>
