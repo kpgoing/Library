@@ -74,9 +74,16 @@ h1 {
 	background-color:#528870;
 }
 
-.right2
+.borrowbutton
 {
     float: right;
+    margin-top: -2px;
+    font-size: larger;
+}
+.returnbutton
+{
+    float: right;
+    font-size: larger;
     margin-top: -2px;
 }
 .label{
@@ -118,4 +125,12 @@ h1 {
      text-align: center;
     margin-left: auto;
     margin-right: auto;
+}
+.borrow_datetime{
+     font-size: larger;
+}
+.return_datetime{
+    float: right;
+    margin-right: 10px;
+    font-size: larger;
 }

@@ -33,7 +33,7 @@
         <span class= "count">剩余: ${book.remainder}  </span>
         已借出:<span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}">   ${book.borrow}</span>
         <span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">     全部都已借出 剩余未预约: ${book.borrow - book.reservation}</span>
-        <button  v-on:click="borrowBook(book.name) " class='right2 button button-primary button-small'>借阅</button>
+        <button  v-on:click="borrowBook(book.name) " class='borrowbutton button button-primary button-small'>借阅</button>
     </div>
   </div>
 </div>
@@ -44,8 +44,9 @@
   <div class = 'books'>
     <div v-for="book in books | filterBy wantBook in 'bookname'" class = 'book' id="app1${ $index }">
    <span class = 'name'>《${book.bookname}》       </span>
-        <span class= "borrow_time">借阅时间: ${book.borrow_datetime}  </span>
-        <button  v-on:click="returnBook($index) " class='right2 button button-primary button-small'>归还</button>
+        <span class= "borrow_datetime">借阅时间: ${book.borrow_datetime}  </span>
+        <button  v-on:click="returnBook($index) " class='returnbutton button button-primary button-small'>归还</button>
+        <span class= "return_datetime">归还期限: ${book.return_datetime}  </span>
     </div>
   </div>
 </div>

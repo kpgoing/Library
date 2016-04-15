@@ -18,6 +18,7 @@ class BookService(object):
             session.close()
             return realbooks
         except BaseException as e:
+            print e
             session.close()
             return None
 
@@ -65,6 +66,7 @@ class BookService(object):
             session.close()
             return reallist
         except BaseException as e:
+            print e
             session.close()
             return None
 
@@ -78,6 +80,7 @@ class BookService(object):
             checkbook.remainder = checkbook.count
             session.add(checkbook)
         except BaseException as e:
+            print e
             session.add(book)
         finally:
             session.commit()
@@ -95,6 +98,7 @@ class BookService(object):
             else:
                 session.add(checkbook)
         except BaseException as e:
+            print e
             pass
         finally:
             session.commit()

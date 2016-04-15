@@ -18,6 +18,7 @@ class AdminService(object):
             session.close()
             return flag
         except BaseException as e:
+            print e
             session.close()
             return False
 

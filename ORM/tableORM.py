@@ -58,7 +58,7 @@ class BorrowList(Base):
         self.bookname = bookname
         self.borrow_datetime = datetime.datetime.now()
     def getContent(self):
-        return {"blid":self.blid,"userid":self.userid,'bookid':self.bookid,'bookname':self.bookname,'borrow_datetime':self.borrow_datetime}
+        return {"blid":self.blid,"userid":self.userid,'bookid':self.bookid,'bookname':self.bookname,'borrow_datetime':self.borrow_datetime.strftime("%Y-%m-%d %H:%M:%S"),'return_datetime':(self.borrow_datetime + datetime.timedelta(days=45)).strftime("%Y-%m-%d %H:%M:%S")}
 
     # 表的结构:
     blid = Column(Integer, primary_key=True,autoincrement=True)
