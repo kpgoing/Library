@@ -1,7 +1,7 @@
 # coding=utf-8
 from ORM import DBsession
 from ORM.tableORM import Book,BorrowList,User,ReservationList
-from  sqlalchemy import func
+from  sqlalchemy import func, and_
 __author__ = 'xbw'
 class BookService(object):
 
@@ -41,16 +41,26 @@ class BookService(object):
     def returnBook(self,blid):
         session = DBsession.DBSession()
         try:
-            checkList = session.query(BorrowList).filter(BorrowList.blid == blid).one()
-            checkBook = session.query(Book).filter(Book.bid == checkList.bookid).one()
+            checkBList = session.query(BorrowList).filter(BorrowList.blid == blid).one()
+            checkBook = session.query(Book).filter(Book.bid == checkBList.bookid).one()
 
-            checkBook.remainder = checkBook.remainder + 1
+            if checkBook.reservation > checkBook.Unclaimed:
+                checkBook.Unclaimed = checkBook.Unclaimed + 1
+            else:
+                checkBook.remainder = checkBook.remainder + 1
             checkBook.borrow = checkBook.borrow - 1
-            session.delete(checkList)
+            if checkBook.reservation > 0:
+                minTime = session.query(func.min(ReservationList.reservation_datetime).label('min_time')).filter(and_(ReservationList.bookid == checkBList.bookid,ReservationList.r_status == 0)).one()
+                checkRList = session.query(ReservationList).filter(ReservationList.reservation_datetime == minTime.min_time).first()
+                checkRList.r_status = 1
+                session.add(checkRList)
+            session.delete(checkBList)
+            session.add(checkBook)
             session.commit()
             session.close()
             return True
         except BaseException as e:
+            print e
             session.close()
             return False
 
@@ -58,11 +68,14 @@ class BookService(object):
         session = DBsession.DBSession()
         try:
             checkbook = session.query(Book).filter(Book.name == bookname).one()
-            checkList = session.query(func.min(BorrowList.borrow_datetime).label('min_time')).filter(BorrowList.bookid == checkbook.bid).one()
+            checkList = session.query(BorrowList.borrow_datetime).filter(BorrowList.bookid == checkbook.bid).order_by(BorrowList.borrow_datetime).all()
+            print checkList
             if checkbook.remainder == 0 and checkbook.reservation < checkbook.count:
                 checkbook.reservation = checkbook.reservation + 1
-                reservationList = ReservationList(userid,checkbook.bid,checkbook.name,checkList.min_time)
+                reservationList = ReservationList(userid,checkbook.bid,checkbook.name,checkList[checkbook.reservation_order].borrow_datetime)
+                checkbook.reservation_order = checkbook.reservation_order + 1
                 session.add(reservationList)
+                session.add(checkbook)
                 session.commit()
                 session.close()
                 return 1
@@ -72,6 +85,29 @@ class BookService(object):
             print e
             session.close()
             return 0
+
+    def getreservedBook(self,userid,rlid):
+        session = DBsession.DBSession()
+        try:
+            checkRList = session.query(ReservationList).filter(ReservationList.rlid == rlid).one()
+            checkBook = session.query(Book).filter(Book.bid == checkRList.bookid).one()
+            checkBook.Unclaimed = checkBook.Unclaimed - 1
+            checkBook.reservation = checkBook.reservation - 1
+            checkBook.borrow = checkBook.borrow + 1
+            checkBook.reservation_order = checkBook.reservation_order - 1
+            borrowList = BorrowList(userid,checkBook.bid,checkBook.name)
+            session.add(borrowList)
+            session.add(checkBook)
+            session.delete(checkRList)
+            session.commit()
+            session.close()
+            return True
+        except BaseException as e:
+            print e
+            session.close()
+            return False
+
+
 
     def getonesreservation(self,userid):
         session = DBsession.DBSession()

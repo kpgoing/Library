@@ -32,6 +32,14 @@ class UserService(object):
             session.close()
             return -1
 
+    def getName(self,userid):
+        session = DBSession()
+        try:
+            checkUser = session.query(User.username).filter(User.id == userid).one()
+            return checkUser.username
+        except BaseException as e:
+            print e
+            return None
 
 
     def regiter(self, user):

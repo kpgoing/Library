@@ -14,10 +14,11 @@
 <div class="top">
    <div class="button-group topbuttons">
     <button id="topbutton1" type="button" class="button button-pill button-primary">我的借阅</button>
-    <button id="topbutton2" type="button" class="button button-pill button-action button-action">图书总览</button>
+    <button id="topbutton2" type="button" class="button button-pill button-action ">图书总览</button>
     <button id="topbutton3" type="button" class="button button-pill button-action button-highlight ">我的预约</button>
   </div>
     </div>
+<div id="username">当前用户:${name}</div>
 <div class="logout">
             <form action="/logout" method="POST">
         <button class="button button-3d button-uppercase button-royal">loggout</button>
@@ -33,8 +34,8 @@
             <tr>
    <th rowspan="3" class = 'name'>《${book.name}》</th>
                 <td class= "count">总数: ${book.count} </td>
-                <th rowspan="3" class= "${book.borrow == book.count? 'hide' : 'show'}">  <button  v-on:click="borrowBook(book.name) " class=' borrowbutton button button-primary button-small '>借阅</button></th>
-                <th rowspan="3" class= "${book.borrow == book.count? 'show' : 'hide'}">  <button  v-on:click="reserveBook(book.name) " class="reservebutton button button-highlight button-small ${book.reservation == book.count ? 'disabled' : '' }">预约</button></th>
+                <th rowspan="3" class= "${book.borrow == book.count? 'hide' : 'show'}">  <button  v-on:click="borrowBook(book.name) " class=' mybutton button button-primary button-small button-longshadow-right'>借阅</button></th>
+                <th rowspan="3" class= "${book.borrow == book.count? 'show' : 'hide'}">  <button  v-on:click="reserveBook(book.name) " class="mybutton button button-highlight button-small button-longshadow-right ${book.reservation == book.count ? 'disabled' : '' }">预约</button></th>
                 </tr>
             <tr>
                 <td class= "count">剩余: ${book.remainder} </td>
@@ -63,7 +64,7 @@
             <tr>
    <th rowspan="3" class = 'name'>《${book.bookname}》       </th>
                 <td class= "borrow_datetime">借阅时间: ${book.borrow_datetime} </td>
-                <th rowspan="3">  <button  v-on:click="returnBook($index) " class='returnbutton button button-primary button-small'>归还</button></th>
+                <th rowspan="3">  <button  v-on:click="returnBook($index) " class='mybutton button button-action button-small button-longshadow-right'>归还</button></th>
                 </tr>
             <tr>
                <td class= "return_datetime"> 归还期限: ${book.return_datetime} </td>
@@ -78,20 +79,20 @@
 <div id="app3" class = 'content'>
   <h1>我的预约</h1>
     <label for="bookname" class="label">search: </label>
-    <input v-model="wantBook" v-on:keyup.enter="returnBook" class = 'input' id="app3bookname">
+    <input v-model="wantBook" class = 'input' id="app3bookname">
   <div class = 'books'>
     <div v-for="book in books | filterBy wantBook in 'bookname'" class = 'book' id="app3${ $index }">
         <table class="bookinfo">
             <tr>
    <th rowspan="3" class = 'name'>《${book.bookname}》</th>
                 <td class= "reservation_datetime">预约时间: ${book.reservation_datetime} </td>
-                <th rowspan="3">  <button  v-on:click="returnBook($index) " class='returnbutton button button-primary button-small'>领取</button></th>
+                <th rowspan="3">  <button  v-on:click="getreservedBook($index) " class='mybutton button button-primary button-small button-longshadow-right'>领取</button></th>
                 </tr>
             <tr>
                <td class= "last_keep_datetime"> 保存期限: ${book.last_keep_datetime} </td>
             </tr>
             <tr>
-            <td>领取状态</td>
+            <td><span v-if="book.r_status == 1">可领取</span><span v-else>不可领取</span></td>
             </tr>
         </table>
           </div>

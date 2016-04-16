@@ -48,7 +48,7 @@ def signin():
 @app.route('/login', methods=['POST','GET'])
 def userLogin():
     if request.method == 'GET':
-        if 'username' in session:
+        if 'userid' in session:
             log.info('%s is get the /login and be redirected to /books',session['userid'])
             return redirect(url_for('userBooks'))
         else:
@@ -63,6 +63,14 @@ def userLogin():
             return ResponseBody(1,None).getContent()
         else:
             return  ResponseBody(0,None).getContent()
+
+@app.route('/getusername',methods=['POST'])
+def getUsername():
+    if 'userid' in session:
+        userService = UserService()
+        data = userService.getName(session['userid'])
+        return ResponseBody(1,data).getContent()
+
 @app.route('/jump', methods=['POST'])
 def userjump():
     return render_template('register.html')
@@ -137,6 +145,14 @@ def reserveBook():
     data = request.get_json()
     bookService = BookService()
     flag = bookService.reserveBook(session['userid'],data['bookname'])
+    myres = ResponseBody(flag,None)
+    return  myres.getContent()
+
+@app.route('/library/getreservedBook',methods=['POST'])
+def getreservedBook():
+    data = request.get_json()
+    bookService = BookService()
+    flag = bookService.getreservedBook(session['userid'],data['rlid'])
     myres = ResponseBody(flag,None)
     return  myres.getContent()
 

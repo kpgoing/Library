@@ -1,6 +1,13 @@
 
 $(function () {
      getAllBooks();
+     getUserName();
+    window.nameapp = new Vue({
+        el:'#username',
+        data:{
+            name:''
+        }
+    });
     window.app2 = new Vue({
           el: '#app2',
           data: {
@@ -95,16 +102,18 @@ $(function () {
             books: {}
           },
           methods: {
-            borrowBook: function (index) {
+            getreservedBook: function (index) {
                 var book = this.books[index];
-                  if (book) {
+                  if (book.r_status == 1) {
                                 that = this;
                                  $('.books').find('#app3'+index).slideUp(300, function () {
                                                 that.books.splice(index, 1);
-                                                //Book({blid: book.blid});
+                                                getreservedBook({rlid:book.rlid});
                                             });
 
-                    }
+                    }else {
+                      alert('无法领取!');
+                  }
               }
             }
           });
@@ -183,7 +192,20 @@ function returnBook(sentdata){
         }
     })
 }
-
+function getreservedBook(sentdata){
+    $.ajax({
+        url : "/library/getreservedBook",
+        type : "POST",
+        datatype:"json",
+        data:JSON.stringify(sentdata),
+        contentType: 'application/json',
+        success : function(mydata){
+            if (mydata.status ==  1) {
+                //alert('借阅成功');
+            }
+        }
+    })
+}
 function getAllBooks(){
     $.ajax({
         url : "/allbooks",
@@ -224,7 +246,19 @@ function getBorrowBooks(){
         }
     });
 }
-
+function getUserName(){
+    $.ajax({
+         url : "/getusername",
+        type : "POST",
+        datatype:"json",
+        contentType: 'application/json',
+        success : function(mydata){
+            if (mydata.status ==  1) {
+                window.nameapp.$set('name',mydata.body);
+            }
+        }
+    });
+}
 function Cool(book){
       $('.books').find('app2#' + book.bid).find('.remainder').slideUp(200, function () {
                             $('.books').find('app2#' + book.bid).find('.borrow').slideUp(200, function () {

@@ -10,7 +10,6 @@ Base = declarative_base()
 
 
 
-# 定义User对象:
 class Admin(Base):
     # 表的名字:
     __tablename__ = 'admin'
@@ -25,7 +24,6 @@ class Admin(Base):
     password = Column(String(20))
 
 
-# 定义User对象:
 class Book(Base):
     # 表的名字:
     __tablename__ = 'book'
@@ -35,7 +33,7 @@ class Book(Base):
         self.count = count
         self.remainder = count
     def getContent(self):
-        return {"bid":self.bid,"name":self.name,"count":self.count,'remainder':self.remainder,'borrow':self.borrow,'reservation':self.reservation}
+        return {"bid":self.bid,"name":self.name,"count":self.count,'remainder':self.remainder,'borrow':self.borrow,'reservation':self.reservation,'Unclaimed':self.Unclaimed}
 
     # 表的结构:
     bid = Column(Integer, primary_key=True,autoincrement=True)
@@ -44,8 +42,8 @@ class Book(Base):
     remainder = Column(Integer,default=1)
     borrow = Column(Integer,default=0)
     reservation = Column(Integer,default=0)
-
-    ownerid = Column(Integer, ForeignKey('user.id'))
+    Unclaimed = Column(Integer,default=0)
+    reservation_order = Column(Integer,default=0)
 
 # 定义User对象:
 class BorrowList(Base):
@@ -65,20 +63,20 @@ class BorrowList(Base):
     bookid = Column(Integer, ForeignKey('book.bid'))
     bookname = Column(String(45))
     borrow_datetime = Column(DateTime)
-    reservation_order = Column(Integer)
 
 class ReservationList(Base):
     # 表的名字:
     __tablename__ = 'reservationlist'
 
-    def __init__(self,userid,bookid,bookname,last_keep_datetime):
+    def __init__(self,userid,bookid,bookname,last_keep_datetime,r_status=0):
         self.userid = userid
         self.bookid = bookid
         self.bookname = bookname
         self.reservation_datetime = datetime.datetime.now()
         self.last_keep_datetime = last_keep_datetime + datetime.timedelta(days=55)
+        self.r_status = r_status
     def getContent(self):
-        return {"rlid":self.rlid,'bookid':self.bookid,'bookname':self.bookname,'reservation_datetime':self.reservation_datetime.strftime("%Y-%m-%d %H:%M:%S"),'last_keep_datetime':self.last_keep_datetime.strftime("%Y-%m-%d %H:%M:%S")}
+        return {"rlid":self.rlid,'bookid':self.bookid,'bookname':self.bookname,'reservation_datetime':self.reservation_datetime.strftime("%Y-%m-%d %H:%M:%S"),'last_keep_datetime':self.last_keep_datetime.strftime("%Y-%m-%d %H:%M:%S"),'r_status':self.r_status}
 
     # 表的结构:
     rlid = Column(Integer, primary_key=True,autoincrement=True)
@@ -87,6 +85,7 @@ class ReservationList(Base):
     bookname = Column(String(45))
     reservation_datetime = Column(DateTime)
     last_keep_datetime = Column(DateTime)
+    r_status = Column(Integer,default=0)
 # 定义User对象:
 class User(Base):
     # 表的名字:
@@ -101,6 +100,5 @@ class User(Base):
     username = Column(String(20))
     password = Column(String(20))
 
-    books = relationship("Book")
     borrowList = relationship("BorrowList")
     reservationList = relationship("ReservationList")
