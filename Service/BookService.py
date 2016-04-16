@@ -54,11 +54,11 @@ class BookService(object):
             session.close()
             return False
 
-    def reservationBook(self,userid,bookname):
+    def reserveBook(self,userid,bookname):
         session = DBsession.DBSession()
         try:
             checkbook = session.query(Book).filter(Book.name == bookname).one()
-            checkList = session.query(func.max(BorrowList.borrow_datetime)).filter(BorrowList.rlid == checkbook.bid).one()
+            checkList = session.query(func.min(BorrowList.borrow_datetime)).filter(BorrowList.rlid == checkbook.bid).one()
             if checkbook.remainder == 0 and checkbook.reservation < checkbook.count:
                 checkbook.reservation = checkbook.reservation + 1
                 reservationList = ReservationList(userid,checkbook.bid,checkbook.name,checkList.borrow_datetime)

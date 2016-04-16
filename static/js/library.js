@@ -19,9 +19,39 @@ $(function () {
                                   $('.books').find('#app2' + i).find('.borrow').slideToggle(200, function () {
                                       that.books[i].borrow++;
                                       that.books[i].remainder--;
-                                      $('.books').find('#app2' + i).find('.borrow').slideToggle(200);
+                                      if (that.books[i].borrow < that.books[i].count) {
+                                          $('.books').find('#app2' + i).find('.borrow').slideToggle(200);
+                                      }
                                       flag = false;
                                       borrowBook({bookname: book});
+                                  });
+                                  break;
+                              }
+                          }
+                      }
+                      setTimeout(function () {
+                          if (flag) {
+                              alert('无此书籍!')
+                          }
+                      }, 500);
+                      this.newBook = ''
+                  }
+              },
+              reserveBook: function (name) {
+                  book = arguments[0] ? arguments[0] : this.wantBook.trim();
+                  if (book) {
+                      var flag = true;
+                      for (i = 0; i < this.books.length; i++) {
+                          if (this.books[i].name == book) {
+                              if (this.books[i].remainder > 0) {
+                                  that = this;
+                                  $('.books').find('#app2' + i).find('.reservation').slideToggle(200, function () {
+                                      that.books[i].reservation++;
+                                      if (that.books[i].reservation < that.books[i].borrow) {
+                                          $('.books').find('#app2' + i).find('.reservation').slideToggle(200);
+                                      }
+                                      flag = false;
+                                      reserveBook({bookname: book});
                                   });
                                   break;
                               }
@@ -102,6 +132,21 @@ function borrowBook(sentdata){
         }
     })
 }
+
+function reserveBook(sentdata){
+    $.ajax({
+        url : "/library/reserve",
+        type : "POST",
+        datatype:"json",
+        data:JSON.stringify(sentdata),
+        contentType: 'application/json',
+        success : function(mydata){
+            if (mydata.status ==  1) {
+                //alert('借阅成功');
+            }
+        }
+    })
+};
 function returnBook(sentdata){
     $.ajax({
         url : "/library/return",
@@ -126,6 +171,20 @@ function getAllBooks(){
         success : function(mydata){
             if (mydata.status ==  1) {
                 window.app2.$set('books',mydata.body);
+            }
+        }
+    });
+}
+
+function getOnesReservation(){
+    $.ajax({
+        url : "/library/showreservation",
+        type : "POST",
+        datatype:"json",
+        contentType: 'application/json',
+        success : function(mydata){
+            if (mydata.status ==  1) {
+                //window.app3.$set('books',mydata.body);
             }
         }
     });

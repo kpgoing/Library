@@ -60,6 +60,12 @@ class BorrowList(Base):
     def getContent(self):
         return {"blid":self.blid,"userid":self.userid,'bookid':self.bookid,'bookname':self.bookname,'borrow_datetime':self.borrow_datetime.strftime("%Y-%m-%d %H:%M:%S"),'return_datetime':(self.borrow_datetime + datetime.timedelta(days=45)).strftime("%Y-%m-%d %H:%M:%S")}
 
+    blid = Column(Integer, primary_key=True,autoincrement=True)
+    userid = Column(Integer, ForeignKey('user.id'))
+    bookid = Column(Integer, ForeignKey('book.bid'))
+    bookname = Column(String(45))
+    borrow_datetime = Column(DateTime)
+
 class ReservationList(Base):
     # 表的名字:
     __tablename__ = 'reservationlist'
@@ -69,7 +75,7 @@ class ReservationList(Base):
         self.bookid = bookid
         self.bookname = bookname
         self.reservationlist_datetime = datetime.datetime.now()
-        self.last_keep_datetime = last_keep_datetime + datetime.timedelta(days=10)
+        self.last_keep_datetime = last_keep_datetime + datetime.timedelta(days=55)
     def getContent(self):
         return {"rlid":self.blid,"userid":self.userid,'bookid':self.bookid,'bookname':self.bookname,'reservation_datetime':self.reservation_datetime.strftime("%Y-%m-%d %H:%M:%S"),'last_keep_datetime':self.last_keep_datetime.strftime("%Y-%m-%d %H:%M:%S")}
 

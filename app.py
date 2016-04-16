@@ -132,6 +132,20 @@ def returnBook():
     myres = ResponseBody(flag,None)
     return  myres.getContent()
 
+@app.route('/library/reserve',methods=['POST'])
+def reserveBook():
+    data = request.get_json()
+    bookService = BookService()
+    flag = bookService.reserveBook(session['userid'],data['bookname'])
+    myres = ResponseBody(flag,None)
+    return  myres.getContent()
+
+@app.route('/library/showreservation',methods=['POST'])
+def showreserveBook():
+    bookService = BookService()
+    borrowBooks = bookService.getonesreservation(session['userid'])
+    myres = ResponseBody(1,borrowBooks)
+    return  myres.getContent()
 
 @app.route('/admin/book')
 def adminBooks():

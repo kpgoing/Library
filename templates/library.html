@@ -29,11 +29,26 @@
     <input v-model="wantBook" v-on:keyup.enter="borrowBook" class = 'input' id="app2bookname">
   <div class = 'books'>
     <div v-for="book in books | filterBy wantBook in 'name'" class = 'book' id="app2${ $index }">
-   <span class = 'name'>《${book.name}》       </span>
-        <span class= "count">剩余: ${book.remainder}  </span>
-        已借出:<span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}">   ${book.borrow}</span>
-        <span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">     全部都已借出 剩余未预约: ${book.borrow - book.reservation}</span>
-        <button  v-on:click="borrowBook(book.name) " class='borrowbutton button button-primary button-small'>借阅</button>
+        <table class="bookinfo">
+            <tr>
+   <th rowspan="3" class = 'name'>《${book.name}》       </th>
+                <td class= "count">剩余: ${book.remainder}  </td>
+                <th rowspan="3">  <button  v-on:click="borrowBook(book.name) " class='borrowbutton button button-primary button-small'>借阅</button></th>
+                </tr>
+            <tr>
+               <td><span class= "${book.borrow == book.count? 'hide' : 'show'}">已借出:</span> <span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}">${book.borrow}</span>
+                        <span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">     全部都已借出 剩余未预约: ${book.borrow - book.reservation}</span>
+               </td>
+            </tr>
+            <tr>
+            <td>预定</td>
+            </tr>
+      </table>
+   <!--<span class = 'name'>《${book.name}》       </span>-->
+        <!--<span class= "count">剩余: ${book.remainder}  </span>-->
+        <!--已借出:<span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}">   ${book.borrow}</span>-->
+        <!--<span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">     全部都已借出 剩余未预约: ${book.borrow - book.reservation}</span>-->
+        <!--<button  v-on:click="borrowBook(book.name) " class='borrowbutton button button-primary button-small'>借阅</button>-->
     </div>
   </div>
 </div>
@@ -43,11 +58,20 @@
     <input v-model="wantBook" v-on:keyup.enter="returnBook" class = 'input' id="app1bookname">
   <div class = 'books'>
     <div v-for="book in books | filterBy wantBook in 'bookname'" class = 'book' id="app1${ $index }">
-   <span class = 'name'>《${book.bookname}》       </span>
-        <span class= "borrow_datetime">借阅时间: ${book.borrow_datetime}  </span>
-        <button  v-on:click="returnBook($index) " class='returnbutton button button-primary button-small'>归还</button>
-        <span class= "return_datetime">归还期限: ${book.return_datetime}  </span>
-    </div>
+        <table class="bookinfo">
+            <tr>
+   <th rowspan="3" class = 'name'>《${book.bookname}》       </th>
+                <td class= "borrow_datetime">借阅时间: ${book.borrow_datetime} </td>
+                <th rowspan="3">  <button  v-on:click="returnBook($index) " class='returnbutton button button-primary button-small'>归还</button></th>
+                </tr>
+            <tr>
+               <td class= "return_datetime"> 归还期限: ${book.return_datetime} </td>
+            </tr>
+            <tr>
+            <td>预定</td>
+            </tr>
+        </table>
+          </div>
   </div>
 </div>
 <div id="app3" class = 'content'>
