@@ -15,7 +15,7 @@
    <div class="button-group topbuttons">
     <button id="topbutton1" type="button" class="button button-pill button-primary">我的借阅</button>
     <button id="topbutton2" type="button" class="button button-pill button-action button-action">图书总览</button>
-    <button id="topbutton3" type="button" class="button button-pill button-action button-highlight ">其他消息</button>
+    <button id="topbutton3" type="button" class="button button-pill button-action button-highlight ">我的预约</button>
   </div>
     </div>
 <div class="logout">
@@ -31,17 +31,18 @@
     <div v-for="book in books | filterBy wantBook in 'name'" class = 'book' id="app2${ $index }">
         <table class="bookinfo">
             <tr>
-   <th rowspan="3" class = 'name'>《${book.name}》       </th>
-                <td class= "count">剩余: ${book.remainder}  </td>
-                <th rowspan="3">  <button  v-on:click="borrowBook(book.name) " class='borrowbutton button button-primary button-small'>借阅</button></th>
+   <th rowspan="3" class = 'name'>《${book.name}》</th>
+                <td class= "count">总数: ${book.count} </td>
+                <th rowspan="3" class= "${book.borrow == book.count? 'hide' : 'show'}">  <button  v-on:click="borrowBook(book.name) " class=' borrowbutton button button-primary button-small '>借阅</button></th>
+                <th rowspan="3" class= "${book.borrow == book.count? 'show' : 'hide'}">  <button  v-on:click="reserveBook(book.name) " class="reservebutton button button-highlight button-small ${book.reservation == book.count ? 'disabled' : '' }">预约</button></th>
                 </tr>
             <tr>
-               <td><span class= "${book.borrow == book.count? 'hide' : 'show'}">已借出:</span> <span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}">${book.borrow}</span>
-                        <span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">     全部都已借出 剩余未预约: ${book.borrow - book.reservation}</span>
-               </td>
+                <td class= "count">剩余: ${book.remainder} </td>
             </tr>
             <tr>
-            <td>预定</td>
+             <td><span class= "${book.borrow == book.count? 'hide' : 'show'}">已借出:</span> <span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}">${book.borrow}</span>
+                        <span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">全部都已借出 剩余未预约: ${book.borrow - book.reservation}</span>
+               </td>
             </tr>
       </table>
    <!--<span class = 'name'>《${book.name}》       </span>-->
@@ -75,7 +76,26 @@
   </div>
 </div>
 <div id="app3" class = 'content'>
-  <h1>我的信息</h1>
+  <h1>我的预约</h1>
+    <label for="bookname" class="label">search: </label>
+    <input v-model="wantBook" v-on:keyup.enter="returnBook" class = 'input' id="app3bookname">
+  <div class = 'books'>
+    <div v-for="book in books | filterBy wantBook in 'bookname'" class = 'book' id="app3${ $index }">
+        <table class="bookinfo">
+            <tr>
+   <th rowspan="3" class = 'name'>《${book.bookname}》</th>
+                <td class= "reservation_datetime">预约时间: ${book.reservation_datetime} </td>
+                <th rowspan="3">  <button  v-on:click="returnBook($index) " class='returnbutton button button-primary button-small'>领取</button></th>
+                </tr>
+            <tr>
+               <td class= "last_keep_datetime"> 保存期限: ${book.last_keep_datetime} </td>
+            </tr>
+            <tr>
+            <td>领取状态</td>
+            </tr>
+        </table>
+          </div>
+  </div>
 </div>
 
 </body>

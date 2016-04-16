@@ -65,6 +65,7 @@ class BorrowList(Base):
     bookid = Column(Integer, ForeignKey('book.bid'))
     bookname = Column(String(45))
     borrow_datetime = Column(DateTime)
+    reservation_order = Column(Integer)
 
 class ReservationList(Base):
     # 表的名字:
@@ -74,10 +75,10 @@ class ReservationList(Base):
         self.userid = userid
         self.bookid = bookid
         self.bookname = bookname
-        self.reservationlist_datetime = datetime.datetime.now()
+        self.reservation_datetime = datetime.datetime.now()
         self.last_keep_datetime = last_keep_datetime + datetime.timedelta(days=55)
     def getContent(self):
-        return {"rlid":self.blid,"userid":self.userid,'bookid':self.bookid,'bookname':self.bookname,'reservation_datetime':self.reservation_datetime.strftime("%Y-%m-%d %H:%M:%S"),'last_keep_datetime':self.last_keep_datetime.strftime("%Y-%m-%d %H:%M:%S")}
+        return {"rlid":self.rlid,'bookid':self.bookid,'bookname':self.bookname,'reservation_datetime':self.reservation_datetime.strftime("%Y-%m-%d %H:%M:%S"),'last_keep_datetime':self.last_keep_datetime.strftime("%Y-%m-%d %H:%M:%S")}
 
     # 表的结构:
     rlid = Column(Integer, primary_key=True,autoincrement=True)

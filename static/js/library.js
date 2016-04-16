@@ -43,15 +43,16 @@ $(function () {
                       var flag = true;
                       for (i = 0; i < this.books.length; i++) {
                           if (this.books[i].name == book) {
-                              if (this.books[i].remainder > 0) {
+                              if (this.books[i].reservation < this.books[i].borrow) {
                                   that = this;
                                   $('.books').find('#app2' + i).find('.reservation').slideToggle(200, function () {
                                       that.books[i].reservation++;
-                                      if (that.books[i].reservation < that.books[i].borrow) {
-                                          $('.books').find('#app2' + i).find('.reservation').slideToggle(200);
-                                      }
+                                      $('.books').find('#app2' + i).find('.reservation').slideToggle(200);
                                       flag = false;
                                       reserveBook({bookname: book});
+                                      //if(that.books[i].reservation == that.books[i].count){
+                                      //     $('.books').find('#app2' + i).find('.reservebutton').addClass('disabled');
+                                      //}
                                   });
                                   break;
                               }
@@ -59,7 +60,7 @@ $(function () {
                       }
                       setTimeout(function () {
                           if (flag) {
-                              alert('无此书籍!')
+                              alert('预约已满!');
                           }
                       }, 500);
                       this.newBook = ''
@@ -81,6 +82,26 @@ $(function () {
                                  $('.books').find('#app1'+index).slideUp(300, function () {
                                                 that.books.splice(index, 1);
                                                 returnBook({blid: book.blid});
+                                            });
+
+                    }
+              }
+            }
+          });
+    window.app3 = new Vue({
+          el: '#app3',
+          data: {
+            wantBook: '',
+            books: {}
+          },
+          methods: {
+            borrowBook: function (index) {
+                var book = this.books[index];
+                  if (book) {
+                                that = this;
+                                 $('.books').find('#app3'+index).slideUp(300, function () {
+                                                that.books.splice(index, 1);
+                                                //Book({blid: book.blid});
                                             });
 
                     }
@@ -113,6 +134,7 @@ $(function () {
           $("#app" + apporder).fadeOut(200, function () {
               $("#app3").fadeIn();
               apporder = 3;
+              getOnesReservation();
           });
       }
 });
@@ -184,7 +206,7 @@ function getOnesReservation(){
         contentType: 'application/json',
         success : function(mydata){
             if (mydata.status ==  1) {
-                //window.app3.$set('books',mydata.body);
+                window.app3.$set('books',mydata.body);
             }
         }
     });
