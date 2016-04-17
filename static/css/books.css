@@ -9,6 +9,7 @@ h1 {
     text-shadow: 0 1px 4px rgba(0,0,0,.2);
     margin: 10px;
 }
+
 .content  {
     /*position:fixed;*/
     margin-left:auto;
@@ -19,6 +20,16 @@ h1 {
     position:relative;
     top: -8%;
   
+}
+.admincontent  {
+    /*position:fixed;*/
+    margin-left:auto;
+    margin-right:auto;
+    width: 50%;
+    /*margin: 0px auto;*/
+    /*margin-width: 302px;*/
+    position:relative;
+
 }
 .input{
     /*display: inline;*/
@@ -111,7 +122,7 @@ h1 {
 
 .add{
     float: right;
-    right: 300px;
+    right: 480px;
     top: -7px;
 }
 

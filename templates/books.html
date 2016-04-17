@@ -11,9 +11,9 @@
 	<link rel="stylesheet" type="text/css" href="/static/css/books.css" />
 </head>
 <body>
-<div id="app" class = 'content'>
-  <h1>Manager books</h1>
-        <div class="logout">
+<div id="app" class = 'admincontent'>
+    <h1>Manager books</h1>
+    <div class="logout">
             <form action="/admin/logout" method="POST">
         <button class="button button-3d button-uppercase button-royal">loggout</button>
                 </form>
@@ -23,11 +23,21 @@
     <button v-on:click="addToBooks" class="add button button-3d button-action button-pill">add</button>
   <div class = 'books'>
     <div v-for="book in books | filterBy newBook in 'name'" class = 'book' id="${book.bid}">
-      <span class = 'name'>《${book.name}》 </span>剩余:
-        <span class= "remainder"> ${book.remainder}       </span>
-        <span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}">已借出: ${book.borrow}</span>
-        <span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">全部都已借出 剩余未预约: ${book.borrow - book.reservation}</span>
-      <button v-on:click="removeBook(book.bid)" class='right'>X</button>
+         <table class="bookinfo">
+            <tr>
+   <th rowspan="3" class = 'name'>《${book.name}》</th>
+                <td>剩余:<span class= "remainder"> ${book.remainder}       </span></td>
+                <th rowspan="3">  <button v-on:click="removeBook(book.bid)" class="mybutton button button-caution button-small button-longshadow-right" >X</button></th>
+                </tr>
+            <tr>
+               <td >已借出:<span class= "borrow  ${book.borrow == book.count? 'hide' : 'show'}"> ${book.borrow}</span>
+               <span class= "reservation ${book.borrow == book.count? 'show' : 'hide'}">全部都已借出 剩余未预约: ${book.borrow - book.reservation}</span>
+               </td>
+            </tr>
+            <tr>
+            <td class = "Unclaimed">预约待领取: ${book.Unclaimed}</td>
+            </tr>
+        </table>
     </div>
   </div>
 </div>

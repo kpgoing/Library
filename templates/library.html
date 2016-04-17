@@ -21,11 +21,11 @@
 <div id="username">当前用户:${name}</div>
 <div class="logout">
             <form action="/logout" method="POST">
-        <button class="button button-3d button-uppercase button-royal">loggout</button>
+        <button class="button button-3d button-uppercase button-royal">logout</button>
                 </form>
     </div>
 <div id="app2" class = 'content'>
-  <h1>图书总览</h1>
+  <h1 >图书总览</h1>
   <label for="bookname" class="label">search: </label>
     <input v-model="wantBook" v-on:keyup.enter="borrowBook" class = 'input' id="app2bookname">
   <div class = 'books'>
@@ -86,7 +86,7 @@
             <tr>
    <th rowspan="3" class = 'name'>《${book.bookname}》</th>
                 <td class= "reservation_datetime">预约时间: ${book.reservation_datetime} </td>
-                <th rowspan="3">  <button  v-on:click="getreservedBook($index) " class='mybutton button button-primary button-small button-longshadow-right'>领取</button></th>
+                <th rowspan="3">  <button  v-on:click="getreservedBook($index) " class="mybutton button button-primary button-small button-longshadow-right ${book.r_status ? '' : 'disabled' }">领取</button></th>
                 </tr>
             <tr>
                <td class= "last_keep_datetime"> 保存期限: ${book.last_keep_datetime} </td>

@@ -40,12 +40,12 @@ $(function () {
                         }
                     }
                       if (flag){
-                      this.books.push({ name: book ,count:1,remainder:1,reservation:0,borrow:0,borrow_datetime: null,reservation_datetime: null});
+                      this.books.push({ name: book ,count:1,remainder:1,reservation:0,borrow:0,Unclaimed:0,borrow_datetime: null,reservation_datetime: null});
                          index =  this.books.length-1;
                           addBook({name:book});
                   }
                   }else {
-                      this.books = [{ name: book ,count:1,remainder:1,reservation:0,borrow:0,borrow_datetime: null,reservation_datetime: null}];
+                      this.books = [{ name: book ,count:1,remainder:1,reservation:0,borrow:0,Unclaimed:0,borrow_datetime: null,reservation_datetime: null}];
                       index =  this.books.length-1;
                       addBook({name:book});
                   }
